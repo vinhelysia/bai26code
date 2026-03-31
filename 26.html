@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giải thích Hàm Python Trực Quan - Bài 26</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #f3f4f6; 
+        }
+        
+        /* Code Editor Style (VS Code Dark Theme Inspired) */
+        .editor { 
+            background-color: #1e1e1e; 
+            color: #d4d4d4; 
+            font-family: 'Consolas', 'Courier New', monospace; 
+            border-radius: 12px; 
+            padding: 24px; 
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); 
+            line-height: 1.7; 
+            font-size: 15px; 
+            overflow-x: auto; 
+        }
+        
+        /* Syntax Highlighting */
+        .keyword { color: #c586c0; } /* Python keywords */
+        .string { color: #ce9178; } /* Strings */
+        .comment { color: #6a9955; } /* Comments */
+        .variable { color: #9cdcfe; }
+        .number { color: #b5cea8; }
+
+        /* Interactive Elements styling - Functions */
+        .interactive {
+            position: relative;
+            color: #dcdcaa; 
+            font-weight: bold;
+            cursor: pointer;
+            border-bottom: 2px dashed #dcdcaa;
+            transition: all 0.2s ease;
+            display: inline-block;
+        }
+        
+        .interactive:hover, .interactive.active {
+            background-color: rgba(220, 220, 170, 0.2);
+            border-radius: 4px;
+        }
+
+        /* Interactive Elements styling - Keywords (def, return) */
+        .keyword-interactive {
+            position: relative;
+            color: #c586c0;
+            font-weight: bold;
+            cursor: pointer;
+            border-bottom: 2px dashed #c586c0;
+            transition: all 0.2s ease;
+            display: inline-block;
+        }
+        
+        .keyword-interactive:hover, .keyword-interactive.active {
+            background-color: rgba(197, 134, 192, 0.2);
+            border-radius: 4px;
+        }
+
+        /* Floating Tooltip Box */
+        #tooltip {
+            position: absolute;
+            width: 320px;
+            background-color: #2563eb;
+            color: white;
+            padding: 16px;
+            border-radius: 10px;
+            font-size: 14px;
+            line-height: 1.5;
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4);
+            pointer-events: none;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.25s ease, transform 0.25s ease;
+            z-index: 1000;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        #tooltip.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* CSS Arrow pointing DOWN */
+        #tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%; 
+            left: 50%;
+            margin-left: -10px;
+            border-width: 10px;
+            border-style: solid;
+            border-color: #2563eb transparent transparent transparent;
+        }
+
+        /* CSS Arrow pointing UP */
+        #tooltip.bottom-placement::after {
+            top: -20px;
+            border-color: transparent transparent #2563eb transparent;
+        }
+
+        /* Dot decoration inside the window */
+        .window-controls {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        .control-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        .dot-red { background-color: #ff5f56; }
+        .dot-yellow { background-color: #ffbd2e; }
+        .dot-green { background-color: #27c93f; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center py-10 px-4 md:px-8">
+
+    <div class="max-w-4xl w-full">
+        <h1 class="text-3xl font-bold text-gray-800 mb-3 text-center">Sơ đồ Bài 26: Hàm trong Python</h1>
+        <p class="text-gray-600 text-center mb-8 text-lg">
+            Hãy <strong class="text-blue-600">bấm vào các từ có nét đứt</strong> để xem cách tạo và gọi Hàm.
+        </p>
+
+        <!-- Code Editor -->
+        <div class="editor relative mb-8">
+            <div class="window-controls">
+                <div class="control-dot dot-red"></div>
+                <div class="control-dot dot-yellow"></div>
+                <div class="control-dot dot-green"></div>
+            </div>
+            
+            <span class="comment"># 1. Định nghĩa Hàm KHÔNG có giá trị trả lại</span><br>
+            <span class="keyword-interactive" data-key="def">def</span> <span class="interactive" data-key="func_name">thong_bao</span>(<span class="interactive" data-key="param">msg</span>):<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="interactive" data-key="print">print</span>(<span class="string">"Xin chào:"</span>, <span class="variable">msg</span>)<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword-interactive" data-key="return_none">return</span><br>
+            <br>
+            <span class="comment"># 2. Định nghĩa Hàm CÓ trả lại giá trị (Kiểm tra nguyên tố)</span><br>
+            <span class="keyword-interactive" data-key="def">def</span> <span class="interactive" data-key="func_name">prime</span>(<span class="interactive" data-key="param">n</span>):<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> <span class="variable">n</span> < <span class="number">2</span>:<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword-interactive" data-key="return_val">return</span> <span class="keyword">False</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">for</span> <span class="variable">k</span> <span class="keyword">in</span> <span class="interactive" data-key="range">range</span>(<span class="number">2</span>, <span class="variable">n</span>):<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> <span class="variable">n</span> % <span class="variable">k</span> == <span class="number">0</span>:<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword-interactive" data-key="return_val">return</span> <span class="keyword">False</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword-interactive" data-key="return_val">return</span> <span class="keyword">True</span><br>
+            <br>
+            <span class="comment"># 3. Lời gọi hàm (Chương trình chính)</span><br>
+            <span class="variable">ten</span> = <span class="interactive" data-key="input">input</span>(<span class="string">"Nhập tên: "</span>)<br>
+            <span class="interactive" data-key="call">thong_bao</span>(<span class="variable">ten</span>) <span class="comment"># Gọi hàm tự định nghĩa</span><br>
+            <br>
+            <span class="variable">so_nhap</span> = <span class="interactive" data-key="int">int</span>(<span class="interactive" data-key="input">input</span>(<span class="string">"Nhập một số: "</span>))<br>
+            <span class="variable">ket_qua</span> = <span class="interactive" data-key="call_return">prime</span>(<span class="variable">so_nhap</span>)<br>
+            <span class="interactive" data-key="print">print</span>(<span class="string">"Kết quả nguyên tố:"</span>, <span class="variable">ket_qua</span>)<br>
+        </div>
+
+        <!-- Static Box -->
+        <div id="instruction-box" class="bg-blue-50 border-2 border-blue-200 rounded-xl p-6 text-blue-800 shadow-sm text-center transition-all duration-300">
+            <svg class="w-8 h-8 mx-auto mb-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>
+            <p class="font-medium text-lg">Bấm vào một cấu trúc (def, return...) ở đoạn code trên để xem giải thích chi tiết.</p>
+        </div>
+    </div>
+
+    <!-- Floating Tooltip -->
+    <div id="tooltip">Nội dung giải thích sẽ nằm ở đây...</div>
+
+    <script>
+        const explanations = {
+            'def': '<strong class="text-xl block mb-2 text-yellow-300">Từ khoá def</strong> Đây là từ khoá bắt buộc của Python dùng để "Định nghĩa" (Define) một hàm mới. Cuối dòng luôn phải có dấu hai chấm ":", và khối lệnh bên dưới bắt buộc phải <i>thụt lề</i>.',
+            'func_name': '<strong class="text-xl block mb-2 text-yellow-300">Tên hàm</strong> Tên do bạn tự đặt (tuân theo quy tắc đặt tên biến). Sau này, bất cứ khi nào bạn muốn sử dụng đoạn code trong hàm này, bạn chỉ cần gọi đúng tên này.',
+            'param': '<strong class="text-xl block mb-2 text-yellow-300">Tham số (Parameter)</strong> Biến nằm trong ngoặc tròn. Nó đóng vai trò là "Cửa nhận hàng", giúp hàm tiếp nhận dữ liệu đầu vào (input) từ bên ngoài truyền vào để xử lý.',
+            'return_none': '<strong class="text-xl block mb-2 text-yellow-300">return (Trống)</strong> Lệnh kết thúc hàm ngay lập tức. Vì không có giá trị nào phía sau chữ return, Python sẽ mặc định trả về giá trị <strong>None</strong>.',
+            'return_val': '<strong class="text-xl block mb-2 text-yellow-300">return (Có giá trị)</strong> Kết thúc hàm và đồng thời ném trả lại một giá trị cụ thể (ở đây là True/False) về nơi đã gọi nó. Một hàm có thể có nhiều lệnh return.',
+            'call': '<strong class="text-xl block mb-2 text-yellow-300">Lời gọi hàm (Function Call)</strong> Đây là lúc ta kích hoạt hàm bằng cách viết <code class="bg-blue-800 px-1 rounded">tên_hàm(giá_trị)</code>. Ở đây biến "ten" sẽ được truyền vào cho tham số "msg" ở trên.',
+            'call_return': '<strong class="text-xl block mb-2 text-yellow-300">Lấy giá trị trả về</strong> Lời gọi hàm <code>prime(so_nhap)</code> sau khi chạy xong sẽ nhả ra kết quả (True hoặc False). Ta dùng dấu "=" để hứng và lưu kết quả đó vào biến <code>ket_qua</code>.',
+            'range': '<strong class="text-xl block mb-2 text-yellow-300">Hàm sẵn có: range()</strong> Thiết kế sẵn của Python. Hàm này sinh ra một danh sách số. Ví dụ: range(2, n) sẽ đẻ ra các số chạy từ 2 đến sát n (tức là n-1).',
+            'int': '<strong class="text-xl block mb-2 text-yellow-300">Hàm sẵn có: int()</strong> Dùng để ép kiểu dữ liệu chữ thành kiểu số nguyên. Bắt buộc phải có để tính toán hoặc so sánh, vì input() mặc định chỉ nhận vào dạng chữ.',
+            'input': '<strong class="text-xl block mb-2 text-yellow-300">Hàm sẵn có: input()</strong> Hàm dùng để tương tác với người dùng. Nó dừng chương trình, hiển thị lời nhắc và lấy văn bản bạn gõ từ bàn phím.',
+            'print': '<strong class="text-xl block mb-2 text-yellow-300">Hàm sẵn có: print()</strong> Hàm cơ bản nhất, lấy dữ liệu và hiển thị kết quả ra ngoài màn hình máy tính.'
+        };
+
+        const interactives = document.querySelectorAll('.interactive, .keyword-interactive');
+        const tooltip = document.getElementById('tooltip');
+        const instructionBox = document.getElementById('instruction-box');
+
+        let activeElement = null;
+
+        interactives.forEach(el => {
+            el.addEventListener('click', (e) => {
+                e.stopPropagation();
+
+                interactives.forEach(i => i.classList.remove('active'));
+
+                el.classList.add('active');
+                activeElement = el;
+
+                const key = el.getAttribute('data-key');
+                const text = explanations[key];
+
+                instructionBox.innerHTML = `<div class="text-left">${text.replace('text-yellow-300', 'text-blue-800').replace(/bg-blue-800/g, 'bg-blue-100')}</div>`;
+                instructionBox.classList.remove('bg-blue-50', 'text-blue-800', 'border-blue-200');
+                instructionBox.classList.add('bg-white', 'text-gray-800', 'border-gray-200');
+
+                tooltip.innerHTML = text;
+                tooltip.classList.add('show');
+
+                const rect = el.getBoundingClientRect();
+                const tooltipRect = tooltip.getBoundingClientRect();
+
+                let top = rect.top + window.scrollY - tooltipRect.height - 15;
+                let left = rect.left + window.scrollX + (rect.width / 2) - (tooltipRect.width / 2);
+
+                if (left < 10) left = 10;
+                if (left + tooltipRect.width > window.innerWidth - 10) {
+                    left = window.innerWidth - tooltipRect.width - 10;
+                }
+
+                tooltip.classList.remove('bottom-placement');
+                if (top < window.scrollY + 10) {
+                    top = rect.bottom + window.scrollY + 15;
+                    tooltip.classList.add('bottom-placement');
+                }
+
+                tooltip.style.top = `${top}px`;
+                tooltip.style.left = `${left}px`;
+            });
+        });
+
+        document.addEventListener('click', () => {
+            tooltip.classList.remove('show');
+            if (activeElement) {
+                activeElement.classList.remove('active');
+                activeElement = null;
+            }
+        });
+
+        window.addEventListener('resize', () => {
+            if (activeElement && tooltip.classList.contains('show')) {
+                activeElement.click(); 
+            }
+        });
+    </script>
+</body>
+</html>
